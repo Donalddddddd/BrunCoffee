@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BRŪN — Specialty Coffee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- DARK/LIGHT ROAST TOGGLE -->
+  <button class="mode-toggle" id="modeToggle" title="Toggle roast mode">☀️</button>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">☕</span>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- ══════════ NAVIGATION ══════════ -->
+  <nav id="navbar">
+    <a href="#" class="logo">BRŪN</a>
+    <ul class="nav-links">
+      <li><a href="#products">Shop</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+      <li><a href="#subscription">Subscribe</a></li>
+      <li><a href="#brewing">Brew Guide</a></li>
+      <li><a href="#origins">Origins</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════ STOCK TICKER ══════════ -->
+  <div class="stock-bar">
+    <div class="stock-inner">
+      <span class="stock-item">☕ Ethiopia Yirgacheffe — <span class="stock-low">Only 7 bags left!</span></span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌿 Colombia Huila — In Stock</span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌋 Guatemala Antigua — <span class="stock-low">4 bags left!</span></span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌿 Brazil Cerrado — In Stock</span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌏 Sumatra Mandheling — In Stock</span>
+      <span class="stock-sep">|</span>
+      <!-- duplicated for seamless loop -->
+      <span class="stock-item">☕ Ethiopia Yirgacheffe — <span class="stock-low">Only 7 bags left!</span></span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌿 Colombia Huila — In Stock</span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌋 Guatemala Antigua — <span class="stock-low">4 bags left!</span></span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌿 Brazil Cerrado — In Stock</span>
+      <span class="stock-sep">|</span>
+      <span class="stock-item">🌏 Sumatra Mandheling — In Stock</span>
+    </div>
+  </div>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section id="hero" style="padding:0">
+    <video id="hero-video" autoplay muted loop playsinline>
+      <source src="images\vid1.mp4" type="video/mp4"/>
+      <!-- Replace with your own coffee video URL -->
+    </video>
+    <!-- Fallback image if video fails to load -->
+    <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600') center/cover;z-index:-1"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Specialty Single-Origin Coffee</p>
+      <h1 class="hero-title">Life's too short<br/>for <em>bad coffee.</em></h1>
+      <p class="hero-sub">Direct-trade beans, expertly roasted fresh to order — delivered to your door every week.</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-primary">Shop Coffees</a>
+        <a href="#quiz" class="btn-outline">Find Your Roast</a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══════════ COFFEE QUIZ ══════════ -->
+  <section id="quiz">
+    <div style="text-align:center">
+      <p class="section-label">Personalized</p>
+      <h2 class="section-title" style="color:var(--cream)">Find Your Perfect Brew</h2>
+      <p style="color:rgba(245,240,232,0.6);max-width:500px;margin:0 auto">Answer 4 quick questions and we'll match you with your ideal coffee.</p>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-progress">
+        <div class="quiz-progress-bar" id="quizBar" style="width:0%"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="quiz-step active" id="step1">
+        <p class="quiz-q">How do you take your coffee?</p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectOpt(this,'black')"><span class="opt-emoji">☕</span>Black, no sugar</button>
+          <button class="quiz-option" onclick="selectOpt(this,'milk')"><span class="opt-emoji">🥛</span>With milk or cream</button>
+          <button class="quiz-option" onclick="selectOpt(this,'sweet')"><span class="opt-emoji">🍫</span>Sweet &amp; flavored</button>
+          <button class="quiz-option" onclick="selectOpt(this,'iced')"><span class="opt-emoji">🧊</span>Iced, any style</button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="quiz-step" id="step2">
+        <p class="quiz-q">What flavors do you love?</p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectOpt(this,'fruity')"><span class="opt-emoji">🍓</span>Fruity &amp; Bright</button>
+          <button class="quiz-option" onclick="selectOpt(this,'chocolate')"><span class="opt-emoji">🍫</span>Chocolatey &amp; Rich</button>
+          <button class="quiz-option" onclick="selectOpt(this,'nutty')"><span class="opt-emoji">🥜</span>Nutty &amp; Smooth</button>
+          <button class="quiz-option" onclick="selectOpt(this,'earthy')"><span class="opt-emoji">🌿</span>Earthy &amp; Bold</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="quiz-step" id="step3">
+        <p class="quiz-q">How strong do you like it?</p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectOpt(this,'mild')"><span class="opt-emoji">😌</span>Mild &amp; gentle</button>
+          <button class="quiz-option" onclick="selectOpt(this,'medium')"><span class="opt-emoji">😊</span>Medium balanced</button>
+          <button class="quiz-option" onclick="selectOpt(this,'strong')"><span class="opt-emoji">💪</span>Strong &amp; intense</button>
+          <button class="quiz-option" onclick="selectOpt(this,'verystrong')"><span class="opt-emoji">🔥</span>Wake me up!</button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="quiz-step" id="step4">
+        <p class="quiz-q">What's your brew method?</p>
+        <div class="quiz-options">
+          <button class="quiz-option" onclick="selectOpt(this,'espresso')"><span class="opt-emoji">⚡</span>Espresso machine</button>
+          <button class="quiz-option" onclick="selectOpt(this,'pourover')"><span class="opt-emoji">☕</span>Pour-over / Chemex</button>
+          <button class="quiz-option" onclick="selectOpt(this,'french')"><span class="opt-emoji">🫗</span>French Press</button>
+          <button class="quiz-option" onclick="selectOpt(this,'drip')"><span class="opt-emoji">🏠</span>Drip machine</button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="quiz-step" id="stepResult">
+        <div class="quiz-result">
+          <div class="result-badge">Your Match</div>
+          <h3 id="resultCoffee">Ethiopia Yirgacheffe</h3>
+          <p id="resultDesc">Bright, floral, and exceptionally clean — this light roast showcases the natural fruit-forward complexity of Ethiopian beans.</p>
+          <a href="#products" class="btn-primary" style="background:var(--gold)">Shop This Coffee</a>
+        </div>
+      </div>
+
+      <div class="quiz-nav">
+        <button class="quiz-back" onclick="quizBack()">← Back</button>
+        <button class="quiz-next" id="quizNext" onclick="quizNext()">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PRODUCTS ══════════ -->
+  <section id="products">
+    <div style="max-width:1200px;margin:0 auto">
+      <p class="section-label">The Collection</p>
+      <h2 class="section-title">Our Coffees</h2>
+      <p class="section-sub">Every bag is roasted to order and shipped within 24 hours for peak freshness.</p>
+      <div class="filters" id="filterBtns">
+        <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+        <button class="filter-btn" onclick="filterProducts('light',this)">Light Roast</button>
+        <button class="filter-btn" onclick="filterProducts('medium',this)">Medium Roast</button>
+        <button class="filter-btn" onclick="filterProducts('dark',this)">Dark Roast</button>
+        <button class="filter-btn" onclick="filterProducts('single',this)">Single Origin</button>
+        <button class="filter-btn" onclick="filterProducts('blend',this)">Blends</button>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ QUICK VIEW MODAL ══════════ -->
+  <div class="modal-overlay" id="quickModal" onclick="closeModal(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeQuickView()">✕</button>
+      <div>
+        <img id="modalImg" src="" alt="Product image"/>
+      </div>
+      <div>
+        <p class="modal-origin" id="modalOrigin"></p>
+        <h2 class="modal-title" id="modalName"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+
+        <div class="grind-select">
+          <label>Grind Size</label>
+          <div class="grind-options">
+            <button class="grind-opt active" onclick="selectGrind(this)">Whole Bean</button>
+            <button class="grind-opt" onclick="selectGrind(this)">Coarse</button>
+            <button class="grind-opt" onclick="selectGrind(this)">Medium</button>
+            <button class="grind-opt" onclick="selectGrind(this)">Fine</button>
+            <button class="grind-opt" onclick="selectGrind(this)">Espresso</button>
+          </div>
+        </div>
+
+        <div class="size-select" style="margin-top:1.2rem">
+          <label>Bag Size</label>
+          <div class="size-options">
+            <button class="size-opt active" onclick="selectSize(this,'250g',0)">250g</button>
+            <button class="size-opt" onclick="selectSize(this,'500g',6)">500g</button>
+            <button class="size-opt" onclick="selectSize(this,'1kg',16)">1kg</button>
+          </div>
+          <p class="bag-calc" id="bagCalc">Approx. 16–20 cups per bag</p>
+        </div>
+
+        <div class="modal-footer">
+          <span class="modal-price" id="modalPrice"></span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-num" id="modalQty">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <button class="btn-primary" onclick="addFromModal()" style="padding:0.7rem 1.5rem">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SUBSCRIPTION PLANS ══════════ -->
+  <section id="subscription">
+    <div style="max-width:1100px;margin:0 auto">
+      <p class="section-label">Never Run Out</p>
+      <h2 class="section-title">Subscribe &amp; Save</h2>
+      <p style="color:rgba(245,240,232,0.65);max-width:500px;line-height:1.7">Fresh coffee on autopilot. Cancel or pause anytime — no questions asked.</p>
+      <div class="sub-plans">
+
+        <div class="sub-plan">
+          <p class="plan-freq">Every 2 Weeks</p>
+          <h3 class="plan-name">The Starter</h3>
+          <p class="plan-price">$18 <span>/delivery</span></p>
+          <ul class="plan-features">
+            <li>250g bag of your choice</li>
+            <li>Free shipping</li>
+            <li>Easy customization</li>
+            <li>10% off retail price</li>
+          </ul>
+          <button class="plan-btn" onclick="showToast('Starter plan selected! 🎉')">Get Started</button>
+        </div>
+
+        <div class="sub-plan featured">
+          <p class="plan-freq">Every Week</p>
+          <h3 class="plan-name">The Regular</h3>
+          <p class="plan-price">$32 <span>/delivery</span></p>
+          <ul class="plan-features">
+            <li>500g bag of your choice</li>
+            <li>Free shipping</li>
+            <li>Priority roasting queue</li>
+            <li>15% off retail price</li>
+            <li>Access to member exclusives</li>
+          </ul>
+          <button class="plan-btn" onclick="showToast('Regular plan selected! ☕')">Get Started</button>
+        </div>
+
+        <div class="sub-plan">
+          <p class="plan-freq">Every Month</p>
+          <h3 class="plan-name">The Explorer</h3>
+          <p class="plan-price">$55 <span>/delivery</span></p>
+          <ul class="plan-features">
+            <li>3 × 250g curated selections</li>
+            <li>Free shipping</li>
+            <li>Tasting notes card included</li>
+            <li>20% off retail price</li>
+            <li>Rare &amp; seasonal coffees</li>
+            <li>Monthly brewing tip letter</li>
+          </ul>
+          <button class="plan-btn" onclick="showToast('Explorer plan selected! 🌍')">Get Started</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ORIGIN MAP ══════════ -->
+  <section id="origins">
+    <p class="section-label">From Seed to Cup</p>
+    <h2 class="section-title">Where Our Coffee Comes From</h2>
+    <p class="section-sub" style="margin:0 auto">We partner directly with small farms across 3 continents, ensuring fair pay and exceptional quality.</p>
+    <div class="map-container">
+      <img class="map-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1200px-World_map_-_low_resolution.svg.png" alt="World map"/>
+      <div class="map-pin" style="left:24%;top:62%"><div class="pin-dot"></div><div class="pin-tooltip">🇧🇷 Brazil Cerrado<br/><small>Nutty · Chocolate · Medium</small></div></div>
+      <div class="map-pin" style="left:20%;top:70%"><div class="pin-dot"></div><div class="pin-tooltip">🇨🇴 Colombia Huila<br/><small>Caramel · Stone Fruit · Medium</small></div></div>
+      <div class="map-pin" style="left:55%;top:64%"><div class="pin-dot"></div><div class="pin-tooltip">🇪🇹 Ethiopia Yirgacheffe<br/><small>Floral · Jasmine · Light</small></div></div>
+      <div class="map-pin" style="left:57%;top:72%"><div class="pin-dot"></div><div class="pin-tooltip">🇰🇪 Kenya AA<br/><small>Blackcurrant · Wine · Light</small></div></div>
+      <div class="map-pin" style="left:45%;top:55%"><div class="pin-dot"></div><div class="pin-tooltip">🇾🇪 Yemen Mocha<br/><small>Winey · Spice · Dark</small></div></div>
+      <div class="map-pin" style="left:75%;top:70%"><div class="pin-dot"></div><div class="pin-tooltip">🇮🇩 Sumatra Mandheling<br/><small>Earthy · Cedar · Dark</small></div></div>
+      <div class="map-pin" style="left:43%;top:60%"><div class="pin-dot"></div><div class="pin-tooltip">🇬🇹 Guatemala Antigua<br/><small>Smoky · Chocolate · Medium-Dark</small></div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ FLAVOR WHEEL ══════════ -->
+  <section id="flavor">
+    <div style="max-width:1100px;margin:0 auto">
+      <p class="section-label">Taste Explorer</p>
+      <h2 class="section-title">Flavor Wheel</h2>
+      <p class="section-sub">Click a flavor category to explore coffees that match your palette.</p>
+      <div class="flavor-layout">
+        <div class="flavor-wheel-wrap">
+          <canvas id="flavorCanvas" width="380" height="380"></canvas>
+        </div>
+        <div class="flavor-legend" id="flavorLegend"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ BREWING GUIDE ══════════ -->
+  <section id="brewing">
+    <div style="max-width:1100px;margin:0 auto">
+      <p class="section-label">Master the Cup</p>
+      <h2 class="section-title">Brewing Guide</h2>
+      <div class="brew-tabs" id="brewTabs">
+        <button class="brew-tab active"  onclick="selectBrew('espresso',this)">Espresso</button>
+        <button class="brew-tab"         onclick="selectBrew('pourover',this)">Pour-Over</button>
+        <button class="brew-tab"         onclick="selectBrew('french',this)">French Press</button>
+        <button class="brew-tab"         onclick="selectBrew('aeropress',this)">AeroPress</button>
+        <button class="brew-tab"         onclick="selectBrew('cold',this)">Cold Brew</button>
+      </div>
+      <div id="brewContents"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ BUNDLE BUILDER ══════════ -->
+  <section id="bundle">
+    <div style="max-width:1100px;margin:0 auto">
+      <p class="section-label">Mix &amp; Match</p>
+      <h2 class="section-title">Build Your Bundle</h2>
+      <p class="section-sub">Choose 3 or more coffees and save 15%. Choose 5+ and save 20%.</p>
+      <div class="bundle-layout">
+        <div class="bundle-items" id="bundleItems"></div>
+        <div class="bundle-summary">
+          <h3>Your Bundle</h3>
+          <div class="bundle-selected-list" id="bundleSelectedList">
+            <p style="color:rgba(245,240,232,0.4);font-size:0.85rem">No coffees selected yet.</p>
+          </div>
+          <div class="bundle-discount" id="bundleDiscount"></div>
+          <div class="bundle-total">
+            <span>Total</span>
+            <span id="bundleTotal">$0.00</span>
+          </div>
+          <button class="checkout-btn" onclick="showToast('Bundle added to cart! 🎁')">Add Bundle to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ LOYALTY PROGRAM ══════════ -->
+  <section id="loyalty">
+    <p class="section-label">Rewards</p>
+    <h2 class="section-title">Loyalty Program</h2>
+    <p class="section-sub" style="margin:0 auto">Every bag earns you points. Points earn you free coffee.</p>
+    <div class="loyalty-card">
+      <p class="loyalty-label">Your Brew Points</p>
+      <div class="loyalty-points">2,450</div>
+      <div class="loyalty-progress-wrap">
+        <div class="loyalty-bar" id="loyaltyBar" style="width:0%"></div>
+      </div>
+      <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:1.5rem">550 points to your next free bag</p>
+      <div class="loyalty-milestones">
+        <div class="milestone"><div class="milestone-pts">500</div><div class="milestone-reward">Free shipping</div></div>
+        <div class="milestone"><div class="milestone-pts">1,000</div><div class="milestone-reward">$5 credit</div></div>
+        <div class="milestone"><div class="milestone-pts">2,000</div><div class="milestone-reward">Free 250g bag</div></div>
+        <div class="milestone"><div class="milestone-pts">3,000</div><div class="milestone-reward">Free 500g bag</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ REVIEWS ══════════ -->
+  <section id="reviews">
+    <div style="max-width:1100px;margin:0 auto">
+      <p class="section-label">Community</p>
+      <h2 class="section-title">What Brewers Say</h2>
+      <div class="reviews-grid">
+        <div class="review-card"><div class="stars">★★★★★</div><p class="review-text">"The Ethiopia Yirgacheffe is unlike anything I've had from a supermarket. It tastes like someone put jasmine flowers in my cup. Remarkable."</p><div class="reviewer"><div class="reviewer-avatar">S</div><div><div class="reviewer-name">Sarah K.</div><div class="reviewer-date">Feb 14, 2026</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><p class="review-text">"I've tried 6 different subscription services. BRŪN is the only one where I can taste a genuine difference. The freshness is real — never bitter, always clean."</p><div class="reviewer"><div class="reviewer-avatar">M</div><div><div class="reviewer-name">Marcus T.</div><div class="reviewer-date">Jan 28, 2026</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><p class="review-text">"The quiz matched me with Guatemala Antigua and it's exactly what I wanted — bold but not harsh. I've reordered three times already."</p><div class="reviewer"><div class="reviewer-avatar">A</div><div><div class="reviewer-name">Ana R.</div><div class="reviewer-date">Jan 12, 2026</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★☆</div><p class="review-text">"Delivery is fast and the packaging is genuinely beautiful. Gifted a bundle to my dad and he called me the day it arrived — that says it all."</p><div class="reviewer"><div class="reviewer-avatar">J</div><div><div class="reviewer-name">James L.</div><div class="reviewer-date">Dec 29, 2025</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><p class="review-text">"The Sumatra is incredible through a French press. Deep and almost syrupy, with this cedar note that lingers. I drink it before bed just for the smell."</p><div class="reviewer"><div class="reviewer-avatar">P</div><div><div class="reviewer-name">Priya N.</div><div class="reviewer-date">Dec 19, 2025</div></div></div></div>
+        <div class="review-card"><div class="stars">★★★★★</div><p class="review-text">"Switched from a big brand and I can't go back. The roast date on every bag makes such a difference. This is what coffee is supposed to taste like."</p><div class="reviewer"><div class="reviewer-avatar">D</div><div><div class="reviewer-name">David W.</div><div class="reviewer-date">Nov 30, 2025</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ SHIPPING TRACKER ══════════ -->
+  <section id="tracker">
+    <div style="max-width:900px;margin:0 auto;text-align:center">
+      <p class="section-label">Track Your Order</p>
+      <h2 class="section-title">Order #BRN-48291</h2>
+      <p class="section-sub" style="margin:0 auto">Ethiopia Yirgacheffe 500g · Estimated delivery: Tuesday, March 3</p>
+      <div class="tracker-steps" style="margin-top:3rem">
+        <div class="tracker-progress" id="trackerProgress" style="width:0%"></div>
+        <div class="tracker-step done"><div class="step-icon">✓</div><div class="step-label">Order Placed</div><div class="step-date">Feb 28</div></div>
+        <div class="tracker-step done"><div class="step-icon">✓</div><div class="step-label">Roasting</div><div class="step-date">Mar 1</div></div>
+        <div class="tracker-step active"><div class="step-icon">📦</div><div class="step-label">Packed &amp; Shipped</div><div class="step-date">Mar 1</div></div>
+        <div class="tracker-step"><div class="step-icon">🚚</div><div class="step-label">In Transit</div><div class="step-date">—</div></div>
+        <div class="tracker-step"><div class="step-icon">🏠</div><div class="step-label">Delivered</div><div class="step-date">—</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ GIFT CARD ══════════ -->
+  <section id="gift">
+    <div style="max-width:1000px;margin:0 auto">
+      <p class="section-label">Give the Gift of Coffee</p>
+      <h2 class="section-title">Gift Cards</h2>
+      <div class="gift-layout">
+        <div>
+          <div class="gift-card-preview">
+            <div class="gift-logo">BRŪN</div>
+            <div class="gift-amount" id="giftAmountDisplay">$50</div>
+            <div class="gift-msg" id="giftMsgDisplay">Enjoy a perfect cup, on us. ☕</div>
+          </div>
+        </div>
+        <div>
+          <div class="gift-form">
+            <div>
+              <label style="font-size:0.8rem;font-weight:600;display:block;margin-bottom:0.5rem">Choose Amount</label>
+              <div class="gift-amounts">
+                <button class="gift-amt active" onclick="setGiftAmt(this,'$25')">$25</button>
+                <button class="gift-amt" onclick="setGiftAmt(this,'$50')">$50</button>
+                <button class="gift-amt" onclick="setGiftAmt(this,'$75')">$75</button>
+                <button class="gift-amt" onclick="setGiftAmt(this,'$100')">$100</button>
+              </div>
+            </div>
+            <input type="text" placeholder="Recipient's Name" id="recipientName"/>
+            <input type="email" placeholder="Recipient's Email"/>
+            <input type="text" placeholder="Your Name (From)"/>
+            <textarea rows="3" placeholder="Personal message..." id="giftMessage" oninput="updateGiftMsg()"></textarea>
+            <input type="date"/>
+            <button class="btn-primary" onclick="showToast('Gift card added to cart! 🎁')" style="padding:0.9rem">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-f">BRŪN</div>
+        <p class="footer-desc">Specialty coffee roasted fresh to order. Direct partnerships with small farms across Ethiopia, Colombia, Guatemala, Brazil, and beyond.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#">All Coffees</a></li>
+          <li><a href="#">Light Roasts</a></li>
+          <li><a href="#">Dark Roasts</a></li>
+          <li><a href="#">Blends</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="#">Brew Guides</a></li>
+          <li><a href="#">Coffee Origins</a></li>
+          <li><a href="#">Roast Profiles</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Returns</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BRŪN Coffee Co. All rights reserved.</span>
+      <span>Made with ☕ &amp; obsession</span>
+    </div>
+  </footer>
+
+  <!-- ══════════ CART SIDEBAR ══════════ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCartOutside(event)">
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h2 class="cart-title">Your Cart ☕</h2>
+        <button class="cart-close" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-items" id="cartItems">
+        <div class="cart-empty">
+          <div class="cart-empty-icon">☕</div>
+          <p>Your cart is empty.</p>
+          <p style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem">Add some coffee to get started!</p>
+        </div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <span id="cartTotal">$0.00</span>
+        </div>
+        <button class="checkout-btn" onclick="showToast('Redirecting to checkout... 🛒')">Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
